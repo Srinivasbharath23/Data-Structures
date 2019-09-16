@@ -1,0 +1,185 @@
+#include <stdio.h>
+#include <stdlib.h>
+void insertAtStart(void);
+void insertAnywhere(int);
+void insertAtEnd(void);
+void delete(void);
+void display(void);
+int length(void);
+struct node
+{
+  int data;
+  struct node* link;
+};
+struct node* root;
+int main()
+{
+    int ch,l,ia;
+    while(1)
+    {
+        printf("\n1.Insert at Start\n");
+        printf("2.Insert Anywhere\n");
+        printf("3.Insert At End\n");
+        printf("4.Delete\n");
+        printf("5.Display\n");
+        printf("6.View Length\n");
+        printf("7.Quit\n");
+        printf("Enter your choice\n");
+        scanf("%d",&ch);
+        switch(ch)
+        {
+            case 1:
+                insertAtStart();
+                break;
+            case 2:
+                printf("Enter the location to insert your data\n");
+                scanf("%d",&ia);
+                if(ia==1)
+                    insertAtStart();
+                else if(ia==length()+1)
+                    insertAtEnd();
+                else if(ia>length()+1)
+                    printf("Enter a Valid Position\n");
+                else
+                    insertAnywhere(ia);
+                break;
+            case 3:
+                insertAtEnd();
+                break;
+            case 4:
+                delete();
+                break;
+            case 5:
+                display();
+                break;
+            case 6:
+                l = length();
+                printf("Length = %d\n",l);
+                break;
+            case 7:
+                exit(0);
+            default:
+                printf("INVALID INPUT\n");
+        }
+    }
+    return 0;
+}
+void insertAtStart()
+{
+    struct node* temp;
+    temp = (struct node*)malloc(sizeof(struct node));
+    printf("Enter Node Data\n");
+    scanf("%d",&temp->data);
+    temp->link = NULL;
+    if(root==NULL)
+    {
+        root = temp;
+    }
+    else
+    {
+        temp->link = root;
+        root = temp;
+    }
+}
+void insertAnywhere(pos)
+{
+    int i = 1;
+    struct node* p;
+    struct node* temp;
+    temp = (struct node*)malloc(sizeof(struct node));
+    p=root;
+    printf("Enter the data to be inserted at position %d\n",pos);
+    scanf("%d",&temp->data);
+    temp->link=NULL;
+    while(i<pos-1)
+    {
+        p = p->link;
+        i++;
+    }
+    temp->link = p->link;
+    p->link = temp;
+}
+void insertAtEnd()
+{
+    struct node* temp;
+    temp = (struct node*)malloc(sizeof(struct node));
+    printf("Enter Node Data\n");
+    scanf("%d",&temp->data);
+    temp->link = NULL;
+    if(root == NULL)
+    {
+        root = temp;
+    }
+    else
+    {
+        struct node* p;
+        p = root;
+        while(p->link != NULL)
+        {
+            p = p->link;
+        }
+        p->link = temp;
+    }
+}
+void delete()
+{
+    int loc;
+    struct node* temp;
+    struct node *q;
+    temp = root;
+    q = root;
+    printf("Enter the location of the node to be deleted\n");
+    scanf("%d",&loc);
+    if(loc>length())
+        printf("Enter a valid location\n");
+    else if(loc == 1)
+    {
+        root = temp->link;
+        temp->link = NULL;
+        free(temp);
+    }
+    else
+    {
+        int i = 1;
+        while(i<loc-1)
+        {
+            temp = temp->link;
+            i++;
+        }
+        q = temp->link;
+        temp->link = q->link;
+        q->link = NULL;
+        free(q);
+    }
+}
+int length()
+{
+    int count = 0;
+    struct node* p;
+    p = root;
+    while(p != NULL)
+    {
+        count++;
+        p = p->link;
+    }
+    return count;
+}
+void display()
+{
+    struct node* p;
+    p = root;
+    if(p == NULL)
+        printf("EMPTY LIST\n");
+    else
+    {
+        while(p != NULL)
+        {
+            if(p->link != NULL)
+                printf("%d-->",p->data);
+            else
+                printf("%d\n",p->data);
+            p = p->link;
+        }
+    }
+   
+}
